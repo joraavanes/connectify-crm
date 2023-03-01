@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { Contact } from './domain/contact.entity';
+import { CreateContactDto } from './dtos/create-contact.dto';
 
 @Injectable()
 export class ContactsService {
@@ -16,7 +17,14 @@ export class ContactsService {
       role: faker.company.catchPhraseNoun()
     }));
   }
-  
+
+  createContact(contactDto: CreateContactDto) {
+    this.contacts.push({
+      id: faker.datatype.number(),
+      ...contactDto
+    });
+  }
+
   findContacts() {
     return this.contacts;
   }
