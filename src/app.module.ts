@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContactsModule } from './contacts/contacts.module';
 import { Contact } from './contacts/domain/contact.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { Contact } from './contacts/domain/contact.entity';
       entities: [Contact],
       synchronize: true
     }),
-    ContactsModule
+    ContactsModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
