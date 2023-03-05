@@ -1,6 +1,16 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  NotFoundException,
+  BadRequestException
+} from '@nestjs/common';
+import { CreateContactDto, UpdateContactDto } from './dtos/';
 import { ContactsService } from './contacts.service';
-import { CreateContactDto } from './dtos/create-contact.dto';
 
 @Controller('contacts')
 export class ContactsController {
@@ -16,5 +26,32 @@ export class ContactsController {
   @Get()
   findAll() {
     return this.contactsService.findContacts();
+  }
+
+  @Get(':email')
+  async findOneByEmail(@Param('email') email: string) {
+    const model = await this.contactsService.findByEmail(email);
+    if (!model) {
+      return new NotFoundException();
+    }
+    return model;
+  }
+
+  @Patch(':id')
+  async updateContact(@Param('id') id: string, @Body() body: UpdateContactDto) {
+    const model = await this.contactsService.updateContact(parseInt(id), body);
+
+    if (!model) return new BadRequestException();
+
+    return model;
+  }
+
+  @Delete(':id')
+  async removeContact(@Param('id') id: string) {
+    const model = await this.contactsService.removeContact(parseInt(id));
+
+    if (!model) return new NotFoundException();
+
+    return model;
   }
 }
