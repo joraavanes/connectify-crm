@@ -32,7 +32,7 @@ export class ContactsController {
   async findOneByEmail(@Param('email') email: string) {
     const model = await this.contactsService.findByEmail(email);
     if (!model) {
-      return new NotFoundException();
+      throw new NotFoundException();
     }
     return model;
   }
@@ -41,7 +41,7 @@ export class ContactsController {
   async updateContact(@Param('id') id: string, @Body() body: UpdateContactDto) {
     const model = await this.contactsService.updateContact(parseInt(id), body);
 
-    if (!model) return new BadRequestException();
+    if (!model) throw new BadRequestException();
 
     return model;
   }
@@ -50,7 +50,7 @@ export class ContactsController {
   async removeContact(@Param('id') id: string) {
     const model = await this.contactsService.removeContact(parseInt(id));
 
-    if (!model) return new NotFoundException();
+    if (!model) throw new NotFoundException();
 
     return model;
   }

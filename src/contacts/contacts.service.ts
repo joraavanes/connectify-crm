@@ -31,7 +31,7 @@ export class ContactsService {
       id
     });
 
-    if (!model) return undefined;
+    if (!model) return false;
 
     const updatedContact: Contact = {
       ...model,
@@ -46,7 +46,7 @@ export class ContactsService {
       id
     });
 
-    if(!model) return undefined;
+    if(!model) return false;
 
     return this.repo.remove(model);
   }
