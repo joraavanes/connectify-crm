@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContactsModule } from './contacts/contacts.module';
 import { Contact } from './contacts/domain/contact.entity';
+import { User } from './users/domain/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -11,7 +12,7 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'connectify-crm.sqlite',
-      entities: [Contact],
+      entities: [Contact, User],
       synchronize: true
     }),
     ContactsModule,
