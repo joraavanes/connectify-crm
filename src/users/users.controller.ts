@@ -9,13 +9,15 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { AuthService } from './auth.service';
 import { CreateUserDto, UpdateUserDto } from './dtos';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
   constructor(
-    private usersService: UsersService
+    private usersService: UsersService,
+    private authService: AuthService
   ) { }
 
   @Get()
@@ -30,9 +32,9 @@ export class UsersController {
     return user;
   }
 
-  @Post()
-  async createUser(@Body() body: CreateUserDto) {
-    const model = await this.usersService.createUser(body);
+  @Post('signup')
+  async singup(@Body() body: CreateUserDto) {
+    const model = await this.authService.singup(body);
 
     if (!model) throw new BadRequestException();
 
