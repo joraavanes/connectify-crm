@@ -19,12 +19,13 @@ export class AuthService {
     const salt = randomBytes(8).toString('hex');
 
     const hash = await scrypt(dto.password, salt, 32) as Buffer;
+    const hashedPassword = hash.toString('hex');
 
-    const result = `${hash}.${salt}`;
+    const hashWithSalt = `${hashedPassword}.${salt}`;
 
     return this.usersService.createUser({
       ...dto,
-      password: result
+      password: hashWithSalt
     });
   }
 
