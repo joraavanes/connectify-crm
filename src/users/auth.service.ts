@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dtos';
+import { CreateUserDto, UserLoginDto } from './dtos';
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
@@ -29,5 +29,19 @@ export class AuthService {
     });
   }
 
-  singin() { }
+  async singin({ email, password }: UserLoginDto) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) return false;
+
+    const [hash, salt] = user.password.split('.');
+    const passwordValidity = await this.validatePasswordHash(hash, salt, password);
+
+    return passwordValidity ? user : false;
+  }
+
+  async validatePasswordHash(storedHash: string, salt: string, plainPassword: string) {
+    const result = (await scrypt(plainPassword, salt, 32) as Buffer).toString('hex');
+
+    return storedHash === result;
+  }
 }
