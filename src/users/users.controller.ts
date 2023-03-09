@@ -10,7 +10,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto, UpdateUserDto } from './dtos';
+import { CreateUserDto, UpdateUserDto, UserLoginDto } from './dtos';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -39,6 +39,15 @@ export class UsersController {
     if (!model) throw new BadRequestException();
 
     return model;
+  }
+
+  @Post('signin')
+  async signin(@Body() body: UserLoginDto) {
+    const result = await this.authService.singin(body);
+
+    if(!result) throw new BadRequestException();
+
+    return result;
   }
 
   @Patch(':id')
