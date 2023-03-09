@@ -6,6 +6,7 @@ import {
   Patch,
   Delete,
   Param,
+  Session,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
@@ -33,21 +34,23 @@ export class UsersController {
   }
 
   @Post('signup')
-  async singup(@Body() body: CreateUserDto) {
-    const model = await this.authService.singup(body);
+  async singup(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.singup(body);
 
-    if (!model) throw new BadRequestException();
+    if (!user) throw new BadRequestException();
 
-    return model;
+    session.userId = user.id;
+    return user;
   }
 
   @Post('signin')
-  async signin(@Body() body: UserLoginDto) {
-    const result = await this.authService.singin(body);
+  async signin(@Body() body: UserLoginDto, @Session() session: any) {
+    const user = await this.authService.singin(body);
 
-    if(!result) throw new BadRequestException();
+    if (!user) throw new BadRequestException();
 
-    return result;
+    session.userId = user.id;
+    return user;
   }
 
   @Patch(':id')
