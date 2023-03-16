@@ -10,18 +10,18 @@ export class UsersService {
     @InjectRepository(User) private repo: Repository<User>
   ) { }
 
-  async createUser(dto: CreateUserDto) {
+  async createUser(dto: CreateUserDto): Promise<User | undefined> {
     const model = await this.findByEmail(dto.email);
     if (model)
-      return false;
+      return undefined;
 
     const contact = this.repo.create(dto);
     return this.repo.save(contact);
   }
 
-  async updateUser(id: number, attrs: Partial<User>) {
+  async updateUser(id: number, attrs: Partial<User>): Promise<User | undefined> {
     const user = await this.findById(id);
-    if (!user) return false;
+    if (!user) return undefined;
 
     const updatedUser = {
       ...user,
@@ -31,23 +31,23 @@ export class UsersService {
     return this.repo.save(updatedUser);
   }
 
-  async removeUser(id: number) {
+  async removeUser(id: number): Promise<User | undefined> {
     const user = await this.findById(id);
-    if (!user) return false;
+    if (!user) return undefined;
 
     return this.repo.remove(user);
   }
 
-  findUsers() {
+  findUsers(): Promise<User[]> {
     return this.repo.findBy({});
   }
 
-  findByEmail(email: string) {
+  findByEmail(email: string): Promise<User | void> {
     return this.repo.findOneBy({ email });
   }
 
-  findById(id: number) {
-    if(!id) return null;
+  findById(id: number): Promise<User | void> {
+    if (!id) return null;
     return this.repo.findOneBy({ id });
   }
 }

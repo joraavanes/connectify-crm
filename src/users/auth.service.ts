@@ -14,7 +14,7 @@ export class AuthService {
 
   async singup(dto: CreateUserDto) {
     const user = await this.usersService.findByEmail(dto.email);
-    if (user) return false;
+    if (user) return undefined;
 
     const salt = randomBytes(8).toString('hex');
 
@@ -31,12 +31,12 @@ export class AuthService {
 
   async singin({ email, password }: UserLoginDto) {
     const user = await this.usersService.findByEmail(email);
-    if (!user) return false;
+    if (!user) return undefined;
 
     const [hash, salt] = user.password.split('.');
     const passwordValidity = await this.validatePasswordHash(hash, salt, password);
 
-    return passwordValidity ? user : false;
+    return passwordValidity ? user : undefined;
   }
 
   async validatePasswordHash(storedHash: string, salt: string, plainPassword: string) {
