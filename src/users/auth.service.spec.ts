@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { User } from './domain/user.entity';
 import { CreateUserDto } from './dtos';
 import { UsersService } from './users.service';
 
@@ -8,9 +9,16 @@ describe('AuthService', () => {
   let MockUsersService: Partial<UsersService>;
 
   beforeEach(async () => {
+    const users: User[] = [];
     MockUsersService = {
-      findByEmail: (email: string) => Promise.resolve(),
-      createUser: (user: CreateUserDto) => Promise.resolve({ id: 1, ...user })
+      findByEmail: (email: string) => {
+        const user = users.find(user => user.email === email);
+        return Promise.resolve(user)
+      },
+      createUser: (user: CreateUserDto) => {
+        users.push({ id: 1, ...user });
+        return Promise.resolve({ id: 1, ...user } as User);
+      }
     };
 
     const module = await Test.createTestingModule({
@@ -50,22 +58,25 @@ describe('AuthService', () => {
   });
 
   test('fails to sign up a new user, while the email is already in use', async () => {
-    MockUsersService.findByEmail = (email: string) => Promise.resolve(model);
-    const user = await service.singup(model);
+    // MockUsersService.findByEmail = (email: string) => Promise.resolve(model);
+    const user1 = await service.singup(model);
+    const user2 = await service.singup(model);
 
-    expect(user).not.toBeDefined();
+    expect(user2).not.toBeDefined();
   });
 
   test('fails to sign in if the provided password is wrong', async () => {
-    MockUsersService.findByEmail = () => Promise.resolve({ ...model, password: 'ksdflkj.sdfkjl' });
+    // MockUsersService.findByEmail = () => Promise.resolve({ ...model, password: 'ksdflkj.sdfkjl' });
+    await service.singup({ ...model, password: 'bingo' });
     const user = await service.singin({ email: model.email, password: model.password });
 
     expect(user).not.toBeDefined();
   });
 
   test('signs in if the correct password is provided', async () => {
-    MockUsersService.findByEmail = 
-      () => Promise.resolve({ ...model, password: 'c5ac4a559baa07b8f7706697f9f2f6ac30dcb47d259464039e11a7524f6a06c3.kdsfin342' });
+    // MockUsersService.findByEmail =
+    //   () => Promise.resolve({ ...model, password: 'c5ac4a559baa07b8f7706697f9f2f6ac30dcb47d259464039e11a7524f6a06c3.kdsfin342' });
+    await service.singup(model);
     const user = await service.singin({ email: model.email, password: model.password });
 
     expect(user).toBeDefined();
