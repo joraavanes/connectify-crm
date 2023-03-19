@@ -49,7 +49,7 @@ describe('AuthService', () => {
 
   test('signs up a new user successfully', async () => {
 
-    const user = await service.singup(model);
+    const user = await service.signup(model);
 
     const [hash, salt] = user.password.split('.');
     expect(hash).toBeDefined();
@@ -59,16 +59,16 @@ describe('AuthService', () => {
 
   test('fails to sign up a new user, while the email is already in use', async () => {
     // MockUsersService.findByEmail = (email: string) => Promise.resolve(model);
-    const user1 = await service.singup(model);
-    const user2 = await service.singup(model);
+    const user1 = await service.signup(model);
+    const user2 = await service.signup(model);
 
     expect(user2).not.toBeDefined();
   });
 
   test('fails to sign in if the provided password is wrong', async () => {
     // MockUsersService.findByEmail = () => Promise.resolve({ ...model, password: 'ksdflkj.sdfkjl' });
-    await service.singup({ ...model, password: 'bingo' });
-    const user = await service.singin({ email: model.email, password: model.password });
+    await service.signup({ ...model, password: 'bingo' });
+    const user = await service.signin({ email: model.email, password: model.password });
 
     expect(user).not.toBeDefined();
   });
@@ -76,8 +76,8 @@ describe('AuthService', () => {
   test('signs in if the correct password is provided', async () => {
     // MockUsersService.findByEmail =
     //   () => Promise.resolve({ ...model, password: 'c5ac4a559baa07b8f7706697f9f2f6ac30dcb47d259464039e11a7524f6a06c3.kdsfin342' });
-    await service.singup(model);
-    const user = await service.singin({ email: model.email, password: model.password });
+    await service.signup(model);
+    const user = await service.signin({ email: model.email, password: model.password });
 
     expect(user).toBeDefined();
   });

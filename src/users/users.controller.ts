@@ -47,7 +47,7 @@ export class UsersController {
 
   @Post('signup')
   async singup(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.singup(body);
+    const user = await this.authService.signup(body);
 
     if (!user) throw new BadRequestException();
 
@@ -57,7 +57,7 @@ export class UsersController {
 
   @Post('signin')
   async signin(@Body() body: UserLoginDto, @Session() session: any) {
-    const user = await this.authService.singin(body);
+    const user = await this.authService.signin(body);
 
     if (!user) throw new BadRequestException();
 

@@ -12,7 +12,7 @@ export class AuthService {
     private usersService: UsersService
   ) { }
 
-  async singup(dto: CreateUserDto) {
+  async signup(dto: CreateUserDto) {
     const user = await this.usersService.findByEmail(dto.email);
     if (user) return undefined;
 
@@ -29,7 +29,7 @@ export class AuthService {
     });
   }
 
-  async singin({ email, password }: UserLoginDto) {
+  async signin({ email, password }: UserLoginDto) {
     const user = await this.usersService.findByEmail(email);
     if (!user) return undefined;
 
