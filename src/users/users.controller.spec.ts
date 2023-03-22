@@ -24,8 +24,8 @@ describe('UsersController', () => {
       }
     };
     mockAuthService = {
-      signup: (dto: CreateUserDto) => mockUsersService.createUser({ fullname: '', role: '', department: '', ...dto }),
-      signin: (dto: UserLoginDto) => Promise.resolve({ id: 1, fullname: '', role: '', department: '', ...dto })
+      signup: (dto: CreateUserDto) => mockUsersService.createUser({ ...dto }),
+      signin: (dto: UserLoginDto) => Promise.resolve({ id: 1, ...dto } as User)
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -66,6 +66,21 @@ describe('UsersController', () => {
 
   test('throws on signing up a user with existing email', (done) => {
     controller.signup({ email: 'pitt@mail.com', password: 'abcdef' } as User, {})
+      .then()
+      .catch(() => done());
+  });
+
+  test('sign in a user successfully', async () => {
+    const session = { userId: null };
+    const user = await controller.signin({ email: 'pitt@mail.com', password: 'abcde' } as User, session);
+
+    expect(session.userId).toBe(1);
+    expect(user).toBeDefined();
+  });
+
+  test('throws if signing in a user that does\'t exist', (done) => {
+    mockAuthService.signin = () => undefined;
+    controller.signin({ email: 'pitt@mail.com', password: 'abcde' } as User, {})
       .then()
       .catch(() => done());
   });
