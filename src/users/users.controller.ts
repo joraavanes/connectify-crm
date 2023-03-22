@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
 import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto } from './dtos';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './domain/user.entity';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('users')
 @Serialize(UserDto)
@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @Post('signup')
-  async singup(@Body() body: CreateUserDto, @Session() session: any) {
+  async signup(@Body() body: CreateUserDto, @Session() session: any) {
     const user = await this.authService.signup(body);
 
     if (!user) throw new BadRequestException();
