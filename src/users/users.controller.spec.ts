@@ -11,30 +11,62 @@ describe('UsersController', () => {
   let mockAuthService: Partial<AuthService>;
 
   beforeEach(async () => {
-    const users: User[] = [];
+    const users: User[] = [{ email: 'pitt@mail.com', password: 's93nd81' } as User];
     mockUsersService = {
       findByEmail: (email: string) => {
         const user = users.find(user => user.email === email);
         return Promise.resolve(user);
       },
       createUser: (dto: CreateUserDto) => {
+        if (users.find(user => user.email === dto.email)) return Promise.reject('User already existing');
         users.push({ id: 1, ...dto });
         return Promise.resolve({ id: 1, ...dto });
       }
     };
     mockAuthService = {
-      signup: (dto: CreateUserDto) => Promise.resolve({ id: 1, ...dto }),
+      signup: (dto: CreateUserDto) => mockUsersService.createUser({ fullname: '', role: '', department: '', ...dto }),
       signin: (dto: UserLoginDto) => Promise.resolve({ id: 1, fullname: '', role: '', department: '', ...dto })
     };
 
     const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: UsersService,
+          useValue: mockUsersService
+        }, {
+          provide: AuthService,
+          useValue: mockAuthService
+        }
+      ],
       controllers: [UsersController],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
   });
 
-  it('should be defined', () => {
+  test("should be defined", () => {
     expect(controller).toBeDefined();
+  });
+
+  test('should return a user based on given email', async () => {
+    const user = await controller.findUser('pitt@mail.com');
+    expect(user).toBeDefined();
+  });
+
+  test('throws on querying for non-existing user', (done) => {
+    controller.findUser('brad@mail.com')
+      .then()
+      .catch(() => done());
+  });
+
+  test('signs up a new user', async () => {
+    const user = await controller.signup({ email: 'dan@mail.com', password: 'bingo@2020' } as CreateUserDto, {});
+    expect(user).toBeDefined();
+  });
+
+  test('throws on signing up a user with existing email', (done) => {
+    controller.signup({ email: 'pitt@mail.com', password: 'abcdef' } as User, {})
+      .then()
+      .catch(() => done());
   });
 });
