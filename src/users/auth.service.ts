@@ -3,6 +3,8 @@ import { CreateUserDto, UserLoginDto } from './dtos';
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
+import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { User } from './domain/user.entity';
 
 const scrypt = promisify(_script);
 
@@ -37,6 +39,26 @@ export class AuthService {
     const passwordValidity = await this.validatePasswordHash(hash, salt, password);
 
     return passwordValidity ? user : undefined;
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.usersService.findByEmail(dto.email);
+    if (!user) return undefined;
+
+    const [hash, salt] = user.password.split('.');
+    const passwordValidity = await this.validatePasswordHash(hash, salt, dto.currentPassword);
+
+    if (!passwordValidity) return undefined;
+
+    const newSalt = randomBytes(8).toString('hex');
+    const newHash = (await scrypt(dto.newPassword, newSalt, 32) as Buffer).toString('hex');
+
+    const updates: User = {
+      ...user,
+      password: `${newHash}.${newSalt}`
+    };
+
+    return this.usersService.updateUser(user.id, updates);
   }
 
   async validatePasswordHash(storedHash: string, salt: string, plainPassword: string) {
