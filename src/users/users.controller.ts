@@ -14,7 +14,7 @@ import {
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto } from './dtos';
+import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto, ResetPasswordDto } from './dtos';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './domain/user.entity';
 import { AuthGuard } from '../guards/auth.guard';
@@ -68,6 +68,15 @@ export class UsersController {
   @Post('signout')
   signout(@Session() session: any) {
     session.userId = null;
+  }
+
+  @Patch('resetpassword')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    const user = await this.authService.resetPassword(dto);
+
+    if (!user) throw new BadRequestException();
+
+    return user;
   }
 
   @Patch(':id')
