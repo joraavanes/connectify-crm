@@ -15,6 +15,13 @@ describe('AuthService', () => {
         const user = users.find(user => user.email === email);
         return Promise.resolve(user)
       },
+      updateUser: (id: number, attrs: Partial<User>) => {
+        const index = users.findIndex(user => user.id === id);
+        const user = users[index];
+        const updatedUser = { ...user, ...attrs };
+        users.splice(index, 1, updatedUser);
+        return Promise.resolve(updatedUser);
+      },
       createUser: (user: CreateUserDto) => {
         users.push({ id: 1, ...user });
         return Promise.resolve({ id: 1, ...user } as User);
@@ -80,5 +87,29 @@ describe('AuthService', () => {
     const user = await service.signin({ email: model.email, password: model.password });
 
     expect(user).toBeDefined();
+  });
+
+  test('reset password successfully', async () => {
+    const user = await service.signup(model);
+    const updates = await service.resetPassword({
+      ...model,
+      currentPassword: model.password,
+      newPassword: 'new@pass',
+      passwordConfirm: 'new@pass'
+    });
+
+    expect(user.password).not.toEqual(updates.password);
+  });
+
+  test('fails to reset password', async () => {
+    await service.signup(model);
+    const updates = await service.resetPassword({
+      ...model,
+      currentPassword: 'abcde',
+      newPassword: 'new@pass',
+      passwordConfirm: 'new@pass'
+    });
+    
+    expect(updates).toBe(undefined);
   });
 });
