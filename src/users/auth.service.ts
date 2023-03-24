@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, UserLoginDto } from './dtos';
-import { UsersService } from './users.service';
 import { randomBytes, scrypt as _script } from 'crypto';
 import { promisify } from 'util';
-import { ResetPasswordDto } from './dtos/reset-password.dto';
+import { CreateUserDto, ResetPasswordDto, UserLoginDto } from './dtos';
+import { UsersService } from './users.service';
 import { User } from './domain/user.entity';
 
 const scrypt = promisify(_script);
