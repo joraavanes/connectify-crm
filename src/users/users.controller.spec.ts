@@ -3,7 +3,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AuthService } from './auth.service';
 import { User } from './domain/user.entity';
-import { CreateUserDto, UserLoginDto } from './dtos';
+import { CreateUserDto, ResetPasswordDto, UserLoginDto } from './dtos';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -25,7 +25,11 @@ describe('UsersController', () => {
     };
     mockAuthService = {
       signup: (dto: CreateUserDto) => mockUsersService.createUser({ ...dto }),
-      signin: (dto: UserLoginDto) => Promise.resolve({ id: 1, ...dto } as User)
+      signin: (dto: UserLoginDto) => Promise.resolve({ id: 1, ...dto } as User),
+      resetPassword: (dto: ResetPasswordDto) => {
+        const user = users.find(user => user.email === dto.email);
+        return user ? Promise.resolve(user) : Promise.reject();
+      }
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -43,6 +47,15 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
   });
+
+  const model = {
+    id: 1,
+    email: 'matt@mail.com',
+    password: 'Some@Pass12',
+    fullname: 'Matt Black',
+    role: 'Commercial Manager',
+    department: 'Sales Dept.'
+  };
 
   test("should be defined", () => {
     expect(controller).toBeDefined();
@@ -84,4 +97,29 @@ describe('UsersController', () => {
       .then()
       .catch(() => done());
   });
+
+  test('reset user\'s password successfully', async () => {
+    const user = await controller.signup(model, {});
+    const result = await controller.resetPassword({
+      email: model.email,
+      currentPassword: model.password,
+      newPassword: 'new@pass',
+      passwordConfirm: 'new@pass'
+    });
+
+    expect(result).toBeDefined();
+  });
+
+  test('fails to reset  user\'s password', done => {
+    controller.signup(model, {}).then();
+    controller.resetPassword({
+      email: 'mike@mail.com',
+      currentPassword: model.password,
+      newPassword: 'new@pass',
+      passwordConfirm: 'new@pass'
+    })
+      .then()
+      .catch(() => done());
+  });
+
 });
