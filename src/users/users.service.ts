@@ -31,8 +31,8 @@ export class UsersService {
     return this.repo.save(updatedUser);
   }
 
-  async removeUser(id: number): Promise<User | undefined> {
-    const user = await this.findById(id);
+  async removeUser(email: string): Promise<User | undefined> {
+    const user = await this.findByEmail(email);
     if (!user) return undefined;
 
     return this.repo.remove(user);

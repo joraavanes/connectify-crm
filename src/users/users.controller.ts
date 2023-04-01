@@ -88,9 +88,9 @@ export class UsersController {
     return model;
   }
 
-  @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
-    const model = await this.usersService.removeUser(parseInt(id));
+  @Delete(':email')
+  async deleteUser(@Param('email') email: string) {
+    const model = await this.usersService.removeUser(email);
     if (!model) throw new NotFoundException();
     return model;
   }
