@@ -11,8 +11,8 @@ export class InquiriesService {
     @InjectRepository(Inquiry) private repo: Repository<Inquiry>
   ) { }
 
-  async createInquiry(dto: CreateInquiryDto, currentUser: User) {
-    const inquiry = await this.repo.create(dto);
+  createInquiry(dto: CreateInquiryDto, currentUser: User) {
+    const inquiry = this.repo.create(dto);
     inquiry.user = currentUser;
 
     return this.repo.save(inquiry);
