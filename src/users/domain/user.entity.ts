@@ -1,4 +1,4 @@
-import { Inquiry } from "src/inquiries/doamin/inquiry.entity";
+import { Inquiry } from "src/inquiries/domain/inquiry.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
