@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Inquiry } from "src/inquiries/doamin/inquiry.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -19,4 +20,7 @@ export class User {
 
   @Column({ nullable: true })
   department: string;
+
+  @OneToMany(() => Inquiry, Inquiry => Inquiry.user)
+  inquiries: Inquiry[]
 }
