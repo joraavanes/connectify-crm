@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContactsModule } from './contacts/contacts.module';
 import { Contact } from './contacts/domain/contact.entity';
+import { Inquiry } from './inquiries/domain/inquiry.entity';
 import { User } from './users/domain/user.entity';
 import { UsersModule } from './users/users.module';
 
@@ -21,7 +22,7 @@ import { UsersModule } from './users/users.module';
       useFactory: (config: ConfigService) => ({
         type: 'sqlite',
         database: config.get<string>('DB_NAME'),
-        entities: [Contact, User],
+        entities: [Contact, User, Inquiry],
         synchronize: true
       })
     }),
