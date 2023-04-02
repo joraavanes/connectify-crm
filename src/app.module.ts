@@ -10,6 +10,7 @@ import { Contact } from './contacts/domain/contact.entity';
 import { Inquiry } from './inquiries/domain/inquiry.entity';
 import { User } from './users/domain/user.entity';
 import { UsersModule } from './users/users.module';
+import { InquiriesModule } from './inquiries/inquiries.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { UsersModule } from './users/users.module';
       })
     }),
     ContactsModule,
-    UsersModule
+    UsersModule,
+    InquiriesModule
   ],
   controllers: [
     AppController
