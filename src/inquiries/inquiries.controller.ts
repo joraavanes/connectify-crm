@@ -4,8 +4,11 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CreateInquiryDto } from './dtos';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { InquiryDto } from './dtos/inquiry.dto';
 
 @Controller('inquiries')
+@Serialize(InquiryDto)
 export class InquiriesController {
   constructor(
     private inquiriesService: InquiriesService
