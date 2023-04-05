@@ -22,5 +22,8 @@ export class User {
   department: string;
 
   @OneToMany(() => Inquiry, Inquiry => Inquiry.user)
-  inquiries: Inquiry[]
+  inquiries: Inquiry[];
+
+  @Column({ default: false })
+  confirmed: boolean;
 }
