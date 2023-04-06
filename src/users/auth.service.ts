@@ -4,6 +4,7 @@ import { promisify } from 'util';
 import { CreateUserDto, ResetPasswordDto, UserLoginDto } from './dtos';
 import { UsersService } from './users.service';
 import { User } from './domain/user.entity';
+import { UserConfirmationDto } from './dtos/user-confirmation.dto';
 
 const scrypt = promisify(_script);
 
@@ -64,5 +65,9 @@ export class AuthService {
     const result = (await scrypt(plainPassword, salt, 32) as Buffer).toString('hex');
 
     return storedHash === result;
+  }
+
+  async changeUserConfirmation(id: number, dto: UserConfirmationDto) {
+    return this.usersService.updateUser(id, dto);
   }
 }
