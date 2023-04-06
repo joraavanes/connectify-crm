@@ -10,6 +10,7 @@ import {
   BadRequestException,
   NotFoundException,
   UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
@@ -18,6 +19,7 @@ import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto, ResetPasswordDto }
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './domain/user.entity';
 import { AuthGuard } from '../guards/auth.guard';
+import { UserConfirmationDto } from './dtos/user-confirmation.dto';
 
 @Controller('users')
 @Serialize(UserDto)
@@ -75,6 +77,15 @@ export class UsersController {
     const user = await this.authService.resetPassword(dto);
 
     if (!user) throw new BadRequestException();
+
+    return user;
+  }
+
+  @Patch('user-confirmation/:id')
+  async userConfirmation(@Param('id', ParseIntPipe) id: number, @Body() dto: UserConfirmationDto) {
+    const user = await this.authService.changeUserConfirmation(id, dto);
+    
+    if(!user) throw new BadRequestException();
 
     return user;
   }
