@@ -11,6 +11,7 @@ import { Inquiry } from './inquiries/domain/inquiry.entity';
 import { User } from './users/domain/user.entity';
 import { UsersModule } from './users/users.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
+import { CurrentUserMiddleware } from './middleswares/current-user.middleware';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ export class AppModule implements NestModule {
       .apply(
         cookieSession({
           secret: 'SOMESECRETKEY%20202'
-        })
+        }),
+        CurrentUserMiddleware
       )
       .forRoutes('*');
   }
