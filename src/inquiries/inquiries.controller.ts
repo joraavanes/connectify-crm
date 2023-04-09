@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { InquiriesService } from './inquiries.service';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthRoute } from 'src/guards/auth.guard';
 import { CreateInquiryDto } from './dtos';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
@@ -15,7 +15,7 @@ export class InquiriesController {
   ) { }
 
   @Post()
-  @UseGuards(AuthGuard)
+  @AuthRoute()
   createInquiry(
     @Body() createInquiryDto: CreateInquiryDto,
     @CurrentUser() currentUser: User

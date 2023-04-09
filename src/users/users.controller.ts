@@ -18,7 +18,7 @@ import { Serialize } from '../interceptors/serialize.interceptor';
 import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto, ResetPasswordDto } from './dtos';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './domain/user.entity';
-import { AuthGuard } from '../guards/auth.guard';
+import { AuthRoute } from '../guards/auth.guard';
 import { UserConfirmationDto } from './dtos/user-confirmation.dto';
 
 @Controller('users')
@@ -35,7 +35,7 @@ export class UsersController {
   }
 
   @Get('current-user')
-  @UseGuards(AuthGuard)
+  @AuthRoute('admin', 'user')
   currentUser(@CurrentUser() user: User) {
     return user;
   }
@@ -84,8 +84,8 @@ export class UsersController {
   @Patch('user-confirmation/:id')
   async userConfirmation(@Param('id', ParseIntPipe) id: number, @Body() dto: UserConfirmationDto) {
     const user = await this.authService.changeUserConfirmation(id, dto);
-    
-    if(!user) throw new BadRequestException();
+
+    if (!user) throw new BadRequestException();
 
     return user;
   }
