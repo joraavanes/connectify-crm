@@ -11,7 +11,7 @@ export class InquiryDto {
   @Expose()
   issuedAt: Date;
 
-  @Transform(({obj}) => obj.user.id)
+  @Transform(({obj}) => obj?.user?.id)
   @Expose()
   userId: number;
 }
