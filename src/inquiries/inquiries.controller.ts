@@ -22,4 +22,9 @@ export class InquiriesController {
   ) {
     return this.inquiriesService.createInquiry(createInquiryDto, currentUser);
   }
+
+  @Get()
+  findInquiries(){
+    return this.inquiriesService.findInquiries();
+  }
 }

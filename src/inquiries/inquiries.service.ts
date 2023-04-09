@@ -17,4 +17,12 @@ export class InquiriesService {
 
     return this.repo.save(inquiry);
   }
+
+  findInquiries() {
+    return this.repo.find({
+      relations: {
+        user: true
+      }
+    });
+  }
 }
