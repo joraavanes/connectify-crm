@@ -21,7 +21,7 @@ export class User {
   @Column({ nullable: true })
   department: string;
 
-  @OneToMany(() => Inquiry, Inquiry => Inquiry.user)
+  @OneToMany(() => Inquiry, inquiry => inquiry.user)
   inquiries: Inquiry[];
 
   @Column({ default: false })
