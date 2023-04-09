@@ -15,7 +15,7 @@ export class User {
   @Column()
   fullname: string;
 
-  @Column()
+  @Column({nullable: true})
   role: string;
 
   @Column({ nullable: true })
