@@ -4,6 +4,9 @@
 connectify-crm.sqlite
 connectify-crm.test.sqlite
 
+.env.development
+.env.test
+
 # Logs
 logs
 *.log
