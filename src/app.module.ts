@@ -44,11 +44,15 @@ import { CurrentUserMiddleware } from './middleswares/current-user.middleware';
   ],
 })
 export class AppModule implements NestModule {
+  constructor(
+    private configService: ConfigService
+  ) { }
+
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          secret: 'SOMESECRETKEY%20202'
+          secret: this.configService.get<string>('COOKIE_SECRET')
         }),
         CurrentUserMiddleware
       )
