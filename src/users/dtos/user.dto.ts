@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
+import { Inquiry } from 'src/inquiries/domain/inquiry.entity';
 
 export class UserDto {
   @Expose()
@@ -12,4 +13,8 @@ export class UserDto {
   
   @Expose()
   department: string;
+
+  @Expose()
+  @Transform(({obj}) => obj.inquiries)
+  inquiries: Inquiry[];
 }
