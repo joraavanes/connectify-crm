@@ -39,7 +39,11 @@ export class UsersService {
   }
 
   findUsers(): Promise<User[]> {
-    return this.repo.findBy({});
+    return this.repo.find({
+      relations: {
+        inquiries: true
+      }
+    });
   }
 
   findByEmail(email: string): Promise<User | void> {
