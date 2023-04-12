@@ -9,17 +9,16 @@ import {
   Session,
   BadRequestException,
   NotFoundException,
-  UseGuards,
   ParseIntPipe
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { UsersService } from './users.service';
-import { Serialize } from '../interceptors/serialize.interceptor';
-import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto, ResetPasswordDto } from './dtos';
-import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from './domain/user.entity';
-import { AuthRoute } from '../guards/auth.guard';
-import { UserConfirmationDto } from './dtos/user-confirmation.dto';
+import { CreateUserDto, UpdateUserDto, UserDto, UserLoginDto, ResetPasswordDto } from 'src/users/dtos';
+import { UserConfirmationDto } from 'src/users/dtos/user-confirmation.dto';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { AuthService } from 'src/users/auth.service';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/domain/user.entity';
+import { AuthRoute } from 'src/guards/auth.guard';
 
 @Controller('users')
 @Serialize(UserDto)

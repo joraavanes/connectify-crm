@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { AuthService } from './auth.service';
-import { User } from './domain/user.entity';
+import { UsersController } from 'src/users/users.controller';
+import { UsersService } from 'src/users/users.service';
+import { AuthService } from 'src/users/auth.service';
+import { User } from 'src/users/domain/user.entity';
 import { CreateUserDto, ResetPasswordDto, UserLoginDto } from './dtos';
 
 describe('UsersController', () => {
@@ -19,8 +19,8 @@ describe('UsersController', () => {
       },
       createUser: (dto: CreateUserDto) => {
         if (users.find(user => user.email === dto.email)) return Promise.reject('User already existing');
-        users.push({ id: 1, ...dto });
-        return Promise.resolve({ id: 1, ...dto });
+        users.push({ id: 1, ...dto, confirmed: false, inquiries: [] });
+        return Promise.resolve({ id: 1, ...dto, confirmed: false, inquiries: [] });
       }
     };
     mockAuthService = {

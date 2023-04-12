@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { AuthService } from './auth.service';
-import { User } from './domain/user.entity';
-import { CreateUserDto } from './dtos';
-import { UsersService } from './users.service';
+import { AuthService } from 'src/users/auth.service';
+import { CreateUserDto } from 'src/users/dtos';
+import { UsersService } from 'src/users/users.service';
+import { User } from 'src/users/domain/user.entity';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -23,7 +23,7 @@ describe('AuthService', () => {
         return Promise.resolve(updatedUser);
       },
       createUser: (user: CreateUserDto) => {
-        users.push({ id: 1, ...user });
+        users.push({ id: 1, confirmed: false, inquiries: [], ...user });
         return Promise.resolve({ id: 1, ...user } as User);
       }
     };
@@ -109,7 +109,7 @@ describe('AuthService', () => {
       newPassword: 'new@pass',
       passwordConfirm: 'new@pass'
     });
-    
+
     expect(updates).toBe(undefined);
   });
 });

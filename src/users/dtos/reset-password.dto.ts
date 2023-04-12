@@ -1,5 +1,5 @@
 import { IsEmail, IsString } from "class-validator";
-import { Match as MatchWith } from "../../CustomValidators/MatchWith";
+import { Match as MatchWith } from "src/CustomValidators/MatchWith";
 
 export class ResetPasswordDto {
   @IsEmail()

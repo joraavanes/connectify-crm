@@ -1,7 +1,7 @@
 import { Test } from "@nestjs/testing";
 import * as request from 'supertest';
 import { INestApplication } from "@nestjs/common";
-import { AppModule } from "./../src/app.module";
+import { AppModule } from "src/app.module";
 
 describe('Auth e2e test', () => {
   let app: INestApplication;
@@ -19,7 +19,7 @@ describe('Auth e2e test', () => {
     email: 'mark@mail.com',
     password: 'abcde',
     fullname: 'Mark Tj',
-    role: 'CTO'
+    role: 'user'
   };
 
   it('should sign up a new user', async () => {
