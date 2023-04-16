@@ -18,11 +18,37 @@ export class InquiriesService {
     return this.repo.save(inquiry);
   }
 
+  async updateInquiry(id: number, attrs: Partial<Inquiry>) {
+    const inquiry = await this.repo.findOneBy({ id });
+    if (!inquiry) return undefined;
+
+    const updatedInquiry = {
+      ...inquiry,
+      ...attrs
+    };
+
+    return this.repo.save(updatedInquiry);
+  }
+
   findInquiries() {
     return this.repo.find({
       relations: {
         user: true
       }
     });
+  }
+
+  findById(id: number) {
+    return this.repo.find({
+      where: { id },
+      relations: { user: true }
+    });
+  }
+
+  async removeInquiry(id: number) {
+    const inquiry = await this.repo.findOneBy({ id });
+    if (!inquiry) return undefined;
+
+    return this.repo.remove(inquiry);
   }
 }
