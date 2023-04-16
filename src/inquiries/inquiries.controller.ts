@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Param,
+  ParseIntPipe,
+  BadRequestException,
+  NotFoundException,
+  Delete
+} from '@nestjs/common';
 import { InquiriesService } from './inquiries.service';
 import { AuthRoute } from 'src/guards/auth.guard';
 import { CreateInquiryDto } from './dtos';
@@ -14,6 +25,19 @@ export class InquiriesController {
     private inquiriesService: InquiriesService
   ) { }
 
+  @Get(':id')
+  async findInquiry(@Param('id', ParseIntPipe) id: number) {
+    const inquiry = await this.inquiriesService.findById(id);
+    if (!inquiry) throw new NotFoundException();
+
+    return inquiry;
+  }
+
+  @Get()
+  findInquiries() {
+    return this.inquiriesService.findInquiries();
+  }
+
   @Post()
   @AuthRoute()
   createInquiry(
@@ -23,8 +47,19 @@ export class InquiriesController {
     return this.inquiriesService.createInquiry(createInquiryDto, currentUser);
   }
 
-  @Get()
-  findInquiries(){
-    return this.inquiriesService.findInquiries();
+  @Patch(':id')
+  async udpateInquiry(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
+    const inquiry = await this.inquiriesService.updateInquiry(id, body);
+    if (!inquiry) throw new BadRequestException();
+
+    return inquiry;
+  }
+
+  @Delete(':id')
+  async removeInquiry(@Param('id', ParseIntPipe) id: number) {
+    const inquiry = await this.inquiriesService.removeInquiry(id);
+    if (!inquiry) throw new BadRequestException();
+
+    return inquiry;
   }
 }
