@@ -8,7 +8,8 @@ import {
   ParseIntPipe,
   BadRequestException,
   NotFoundException,
-  Delete
+  Delete,
+  Query
 } from '@nestjs/common';
 import { InquiriesService } from './inquiries.service';
 import { AuthRoute } from 'src/guards/auth.guard';
@@ -17,6 +18,7 @@ import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { InquiryDto } from './dtos/inquiry.dto';
+import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
 
 @Controller('inquiries')
 @Serialize(InquiryDto)
@@ -34,8 +36,10 @@ export class InquiriesController {
   }
 
   @Get()
-  findInquiries() {
-    return this.inquiriesService.findInquiries();
+  getFilteredInquiries(@Query() query: QueryInquiriesDto) {
+    return Object.keys(query).length ?
+      this.inquiriesService.queryInquiries(query) :
+      this.inquiriesService.findInquiries();
   }
 
   @Post()
