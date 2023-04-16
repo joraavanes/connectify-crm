@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Inquiry } from './domain/inquiry.entity';
 import { User } from 'src/users/domain/user.entity';
 import { CreateInquiryDto } from './dtos';
+import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
 
 @Injectable()
 export class InquiriesService {
@@ -36,6 +37,17 @@ export class InquiriesService {
         user: true
       }
     });
+  }
+
+  queryInquiries({ client, product, issuedAt }: QueryInquiriesDto) {
+    return this.repo.createQueryBuilder()
+      .select('*')
+      .where(product ? 'lower(product) = :product' : 'TRUE', { product: product.toLowerCase() })
+      .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client.toLowerCase() })
+      .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
+      .orderBy('issuedAt - :issuedAt', 'ASC')
+      .setParameters({ issuedAt })
+      .getRawMany();
   }
 
   findById(id: number) {
