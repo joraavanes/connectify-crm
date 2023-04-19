@@ -39,14 +39,16 @@ export class InquiriesService {
     });
   }
 
-  queryInquiries({ client, product, issuedAt }: QueryInquiriesDto) {
+  queryInquiries({ client, product, issuedAt, count, pageNumber }: QueryInquiriesDto) {
     return this.repo.createQueryBuilder()
       .select('*')
       .where(product ? 'lower(product) = :product' : 'TRUE', { product: product.toLowerCase() })
       .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client.toLowerCase() })
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
-      .orderBy('issuedAt - :issuedAt', 'ASC')
+      .orderBy('issuedAt', 'DESC')
       .setParameters({ issuedAt })
+      .skip(pageNumber * count)
+      .take(count)
       .getRawMany();
   }
 
