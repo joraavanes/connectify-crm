@@ -19,6 +19,7 @@ import { User } from 'src/users/domain/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { InquiryDto } from './dtos/inquiry.dto';
 import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
+import { UpdateInquiryDto } from './dtos/update-inquiry.dto';
 
 @Controller('inquiries')
 @Serialize(InquiryDto)
@@ -52,8 +53,11 @@ export class InquiriesController {
   }
 
   @Patch(':id')
-  async udpateInquiry(@Param('id', ParseIntPipe) id: number, @Body() body: any) {
-    const inquiry = await this.inquiriesService.updateInquiry(id, body);
+  async udpateInquiry(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateInquiryDto
+  ) {
+    const inquiry = await this.inquiriesService.updateInquiry(id, dto);
     if (!inquiry) throw new BadRequestException();
 
     return inquiry;
