@@ -24,9 +24,11 @@ export class QueryInquiriesDto {
 
   @Transform(({ value }) => Number(value))
   @IsNumber()
+  @IsOptional()
   count: number;
-
+  
   @Transform(({ value }) => Number(value))
   @IsNumber()
+  @IsOptional()
   pageNumber: number;
 }
