@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsDate, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDate, IsNumber, IsOptional, IsString, Min } from "class-validator";
 
 export class QueryInquiriesDto {
   @IsString()
@@ -25,10 +25,11 @@ export class QueryInquiriesDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsOptional()
-  count: number;
+  count: number = 10;
   
   @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsOptional()
-  pageNumber: number;
+  @Min(1)
+  pageNumber: number = 1;
 }
