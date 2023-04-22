@@ -38,9 +38,7 @@ export class InquiriesController {
 
   @Get()
   getFilteredInquiries(@Query() query: QueryInquiriesDto) {
-    return Object.keys(query).length ?
-      this.inquiriesService.queryInquiries(query) :
-      this.inquiriesService.findInquiries();
+    return this.inquiriesService.queryInquiries(query);
   }
 
   @Post()
