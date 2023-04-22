@@ -42,8 +42,8 @@ export class InquiriesService {
   queryInquiries({ client, product, issuedAt, count, pageNumber }: QueryInquiriesDto) {
     return this.repo.createQueryBuilder()
       .select('*')
-      .where(product ? 'lower(product) = :product' : 'TRUE', { product: product.toLowerCase() })
-      .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client.toLowerCase() })
+      .where(product ? 'lower(product) = :product' : 'TRUE', { product: product?.toLowerCase() })
+      .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client?.toLowerCase() })
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
       .orderBy('issuedAt', 'DESC')
       .setParameters({ issuedAt })
