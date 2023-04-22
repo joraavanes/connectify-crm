@@ -47,7 +47,7 @@ export class InquiriesService {
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
       .orderBy('issuedAt', 'DESC')
       .setParameters({ issuedAt })
-      .skip(pageNumber * count)
+      .skip((pageNumber - 1) * count)
       .take(count)
       .getRawMany();
   }
