@@ -1,7 +1,9 @@
 import { Expose, Transform } from "class-transformer";
-import { UserDto } from "src/users/dtos";
 
 export class InquiryDto {
+  @Expose()
+  id: number;
+
   @Expose()
   client: string;
   
