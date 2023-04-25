@@ -82,10 +82,39 @@ describe('Inquiry e2e test', () => {
       .expect(403);
   });
 
+  it('should delete an inquiry successfully', async () => {
+    await request(app.getHttpServer())
+      .post('/inquiries')
+      .set('Cookie', cookie)
+      .send(inquiryModel)
+      .expect(res => { inquiryId = res.body.id });
+
+    return request(app.getHttpServer())
+      .delete(`/inquiries/${inquiryId}`)
+      .set('Cookie', cookie)
+      .expect(200)
+      .expect(() => {
+        inquiryId = undefined;
+      });
+  });
+
+  it('should fail to delete an inquiry', async () => {
+    await request(app.getHttpServer())
+      .post('/inquiries')
+      .set('Cookie', cookie)
+      .send(inquiryModel)
+      .expect(res => { inquiryId = res.body.id });
+
+    return request(app.getHttpServer())
+      .delete(`/inquiries/${inquiryId}`)
+      .expect(403);
+  });
+
   afterEach(async () => {
     if (inquiryId) {
       await request(app.getHttpServer())
         .delete(`/inquiries/${inquiryId}`)
+        .set('Cookie', cookie)
         .expect(200);
     }
 
