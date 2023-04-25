@@ -51,6 +51,7 @@ export class InquiriesController {
   }
 
   @Patch(':id')
+  @AuthRoute()
   async udpateInquiry(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateInquiryDto
@@ -62,6 +63,7 @@ export class InquiriesController {
   }
 
   @Delete(':id')
+  @AuthRoute()
   async removeInquiry(@Param('id', ParseIntPipe) id: number) {
     const inquiry = await this.inquiriesService.removeInquiry(id);
     if (!inquiry) throw new BadRequestException();
