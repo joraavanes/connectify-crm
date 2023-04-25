@@ -37,6 +37,14 @@ describe('Inquiry e2e test', () => {
       });
   });
 
+  function createNewInquiry() {
+    return request(app.getHttpServer())
+      .post('/inquiries')
+      .set('Cookie', cookie)
+      .send(inquiryModel)
+      .expect(res => { inquiryId = res.body.id });
+  }
+
   it('should create new inquiry', async () => {
     return request(app.getHttpServer())
       .post('/inquiries')
@@ -56,13 +64,9 @@ describe('Inquiry e2e test', () => {
   });
 
   it('should update an inquiry successfully', async () => {
-    await request(app.getHttpServer())
-      .post('/inquiries')
-      .set('Cookie', cookie)
-      .send(inquiryModel)
-      .expect(res => { inquiryId = res.body.id });
-      
-      return request(app.getHttpServer())
+    await createNewInquiry();
+
+    return request(app.getHttpServer())
       .patch(`/inquiries/${inquiryId}`)
       .set('Cookie', cookie)
       .send({ product: 'stamps' })
@@ -70,11 +74,7 @@ describe('Inquiry e2e test', () => {
   });
 
   it('should fail to update an inquiry without user id (Cookie)', async () => {
-    await request(app.getHttpServer())
-      .post('/inquiries')
-      .set('Cookie', cookie)
-      .send(inquiryModel)
-      .expect(res => { inquiryId = res.body.id });
+    await createNewInquiry();
 
     return request(app.getHttpServer())
       .patch(`/inquiries/${inquiryId}`)
@@ -83,11 +83,7 @@ describe('Inquiry e2e test', () => {
   });
 
   it('should delete an inquiry successfully', async () => {
-    await request(app.getHttpServer())
-      .post('/inquiries')
-      .set('Cookie', cookie)
-      .send(inquiryModel)
-      .expect(res => { inquiryId = res.body.id });
+    await createNewInquiry();
 
     return request(app.getHttpServer())
       .delete(`/inquiries/${inquiryId}`)
@@ -99,11 +95,7 @@ describe('Inquiry e2e test', () => {
   });
 
   it('should fail to delete an inquiry', async () => {
-    await request(app.getHttpServer())
-      .post('/inquiries')
-      .set('Cookie', cookie)
-      .send(inquiryModel)
-      .expect(res => { inquiryId = res.body.id });
+    await createNewInquiry();
 
     return request(app.getHttpServer())
       .delete(`/inquiries/${inquiryId}`)
