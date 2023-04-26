@@ -22,13 +22,13 @@ import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
 import { UpdateInquiryDto } from './dtos/update-inquiry.dto';
 
 @Controller('inquiries')
-@Serialize(InquiryDto)
 export class InquiriesController {
   constructor(
     private inquiriesService: InquiriesService
   ) { }
 
   @Get(':id')
+  @Serialize(InquiryDto)
   async findInquiry(@Param('id', ParseIntPipe) id: number) {
     const inquiry = await this.inquiriesService.findById(id);
     if (!inquiry) throw new NotFoundException();
@@ -43,6 +43,7 @@ export class InquiriesController {
 
   @Post()
   @AuthRoute()
+  @Serialize(InquiryDto)
   createInquiry(
     @Body() createInquiryDto: CreateInquiryDto,
     @CurrentUser() currentUser: User
@@ -52,6 +53,7 @@ export class InquiriesController {
 
   @Patch(':id')
   @AuthRoute()
+  @Serialize(InquiryDto)
   async udpateInquiry(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateInquiryDto
@@ -64,6 +66,7 @@ export class InquiriesController {
 
   @Delete(':id')
   @AuthRoute()
+  @Serialize(InquiryDto)
   async removeInquiry(@Param('id', ParseIntPipe) id: number) {
     const inquiry = await this.inquiriesService.removeInquiry(id);
     if (!inquiry) throw new BadRequestException();
