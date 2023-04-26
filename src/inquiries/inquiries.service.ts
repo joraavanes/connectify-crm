@@ -40,15 +40,16 @@ export class InquiriesService {
   }
 
   queryInquiries({ client, product, issuedAt, count, pageNumber }: QueryInquiriesDto) {
-    return this.repo.createQueryBuilder()
-      .select('*')
+    return this.repo.createQueryBuilder('inquiry')
+      .leftJoinAndSelect('inquiry.user', 'user')
+      .select('inquiry.id, userId, email, fullname, product, issuedAt')
       .where(product ? 'lower(product) = :product' : 'TRUE', { product: product?.toLowerCase() })
       .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client?.toLowerCase() })
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
       .orderBy('issuedAt', 'DESC')
       .setParameters({ issuedAt })
-      .skip((pageNumber - 1) * count)
-      .take(count)
+      .offset((pageNumber - 1) * count) // .skip can be used without join
+      .limit(count) // .take can be used without join
       .getRawMany();
   }
 
