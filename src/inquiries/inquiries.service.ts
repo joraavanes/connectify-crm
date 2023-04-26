@@ -54,7 +54,7 @@ export class InquiriesService {
   }
 
   findById(id: number) {
-    return this.repo.find({
+    return this.repo.findOne({
       where: { id },
       relations: { user: true }
     });
