@@ -15,6 +15,8 @@ export class Inquiry {
   @Column()
   issuedAt: Date;
 
-  @ManyToOne(() => User, user => user.inquiries)
+  @ManyToOne(() => User, user => user.inquiries, {
+    onDelete: 'CASCADE'
+  })
   user: User;
 }
