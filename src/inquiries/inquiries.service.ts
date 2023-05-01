@@ -39,13 +39,14 @@ export class InquiriesService {
     });
   }
 
-  queryInquiries({ client, product, issuedAt, count, pageNumber }: QueryInquiriesDto) {
+  queryInquiries({ client, product, issuedAt, userEmail, count, pageNumber }: QueryInquiriesDto) {
     return this.repo.createQueryBuilder('inquiry')
       .leftJoinAndSelect('inquiry.user', 'user')
       .select('inquiry.id, userId, email, fullname, product, issuedAt')
       .where(product ? 'lower(product) = :product' : 'TRUE', { product: product?.toLowerCase() })
       .andWhere(client ? 'lower(client) = :client' : 'TRUE', { client: client?.toLowerCase() })
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
+      .andWhere(userEmail ? "user.email = :email" : "TRUE", { email: userEmail })
       .orderBy('issuedAt', 'DESC')
       .setParameters({ issuedAt })
       .offset((pageNumber - 1) * count) // .skip can be used without join
