@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsDate, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import { IsDate, IsEmail, IsNumber, IsOptional, IsString, Min } from "class-validator";
 
 export class QueryInquiriesDto {
   @IsString()
@@ -17,10 +17,10 @@ export class QueryInquiriesDto {
   @IsDate()
   issuedAt: Date;
 
-  @Transform(({ value }) => Number(value))
-  @IsNumber()
+  @IsEmail()
+  @IsString()
   @IsOptional()
-  user: boolean;
+  userEmail: boolean;
 
   @Transform(({ value }) => Number(value))
   @IsNumber()
