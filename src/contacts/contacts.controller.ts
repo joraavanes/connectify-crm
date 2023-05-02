@@ -7,10 +7,12 @@ import {
   Delete,
   Param,
   NotFoundException,
-  BadRequestException
+  BadRequestException,
+  Query
 } from '@nestjs/common';
 import { CreateContactDto, UpdateContactDto } from './dtos/';
 import { ContactsService } from './contacts.service';
+import { QueryContactsDto } from './dtos/query-contacts.dto';
 
 @Controller('contacts')
 export class ContactsController {
@@ -24,8 +26,8 @@ export class ContactsController {
   }
 
   @Get()
-  findAll() {
-    return this.contactsService.findContacts();
+  findAll(@Query() dto: QueryContactsDto) {
+    return this.contactsService.queryContacts(dto);
   }
 
   @Get(':email')
