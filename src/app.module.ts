@@ -12,6 +12,7 @@ import { User } from './users/domain/user.entity';
 import { UsersModule } from './users/users.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
 import { CurrentUserMiddleware } from './middleswares/current-user.middleware';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { CurrentUserMiddleware } from './middleswares/current-user.middleware';
     }),
     ContactsModule,
     UsersModule,
-    InquiriesModule
+    InquiriesModule,
+    ClientsModule
   ],
   controllers: [
     AppController
