@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { faker } from '@faker-js/faker';
 import { Contact } from './domain/contact.entity';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueryContactsDto } from './dtos/query-contacts.dto';
 
 @Injectable()
 export class ContactsService {
@@ -26,6 +26,20 @@ export class ContactsService {
     })
   }
 
+  queryContacts({ fullname, mobile, email, phone, role, count, pageNumber }: QueryContactsDto) {
+    return this.repo.createQueryBuilder()
+      .select("*")
+      .where(fullname ? "fullname = :fullname" : "TRUE", { fullname })
+      .andWhere(mobile ? "mobile = :mobile" : "TRUE", { mobile })
+      .andWhere(email ? "email = :email" : "TRUE", { email })
+      .andWhere(phone ? "phone = :phone" : "TRUE", { phone })
+      .andWhere(role ? "role = :role" : "TRUE", { role })
+      .orderBy("id", "DESC")
+      .offset((pageNumber - 1) * pageNumber)
+      .limit(count)
+      .getRawMany();
+  }
+
   async updateContact(id: number, attrs: Partial<Contact>) {
     const model = await this.repo.findOneBy({
       id
@@ -46,7 +60,7 @@ export class ContactsService {
       id
     });
 
-    if(!model) return false;
+    if (!model) return false;
 
     return this.repo.remove(model);
   }
