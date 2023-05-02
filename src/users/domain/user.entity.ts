@@ -1,3 +1,4 @@
+import { Client } from "src/clients/domain/client.entity";
 import { Inquiry } from "src/inquiries/domain/inquiry.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
@@ -15,7 +16,7 @@ export class User {
   @Column()
   fullname: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   role: string;
 
   @Column({ nullable: true })
@@ -23,6 +24,11 @@ export class User {
 
   @OneToMany(() => Inquiry, inquiry => inquiry.user)
   inquiries: Inquiry[];
+
+  @OneToMany(() => Client, client => client.user, {
+    onDelete: 'SET NULL'
+  })
+  clients: Client[];
 
   @Column({ default: false })
   confirmed: boolean;

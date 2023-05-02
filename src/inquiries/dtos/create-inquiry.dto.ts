@@ -7,8 +7,8 @@ export class CreateInquiryDto {
     this.issuedAt = issuedAt;
   }
 
-  @IsString()
-  client: string;
+  // @IsString()
+  // client: string;
 
   @IsString()
   product: string;

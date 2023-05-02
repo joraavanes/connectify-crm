@@ -1,3 +1,4 @@
+import { Client } from "src/clients/domain/client.entity";
 import { User } from "src/users/domain/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -5,9 +6,6 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class Inquiry {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  client: string;
 
   @Column()
   product: string;
@@ -19,4 +17,7 @@ export class Inquiry {
     onDelete: 'CASCADE'
   })
   user: User;
+
+  @ManyToOne(() => Client, client => client.inquiries)
+  client: Client;
 }
