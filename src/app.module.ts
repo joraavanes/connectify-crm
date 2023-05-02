@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { InquiriesModule } from './inquiries/inquiries.module';
 import { CurrentUserMiddleware } from './middleswares/current-user.middleware';
 import { ClientsModule } from './clients/clients.module';
+import { Client } from './clients/domain/client.entity';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { ClientsModule } from './clients/clients.module';
       useFactory: (config: ConfigService) => ({
         type: 'sqlite',
         database: config.get<string>('DB_NAME'),
-        entities: [Contact, User, Inquiry],
+        entities: [Contact, User, Inquiry, Client],
         synchronize: true
       })
     }),
