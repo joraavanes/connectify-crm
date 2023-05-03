@@ -1,14 +1,14 @@
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany, ManyToOne } from "typeorm";
 import { Contact } from "src/contacts/domain/contact.entity";
 import { Inquiry } from "src/inquiries/domain/inquiry.entity";
 import { User } from "src/users/domain/user.entity";
-import { PrimaryGeneratedColumn, Column, Entity, OneToMany, ManyToOne } from "typeorm";
 
 @Entity()
 export class Client {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
@@ -17,19 +17,19 @@ export class Client {
   @Column()
   issuedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   country: string;
 
-  @Column()
+  @Column({ nullable: true })
   city: string;
 
-  @Column()
+  @Column({ nullable: true })
   postalAddress: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ length: 12 })
   phone: string;
 
   @OneToMany(() => Inquiry, inquiry => inquiry.client, {
