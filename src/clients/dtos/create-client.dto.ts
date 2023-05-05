@@ -35,7 +35,6 @@ export class CreateClientDto {
     email: string;
 
     @IsString()
-    @IsOptional()
     @MaxLength(15)
     phone: string;
 }
