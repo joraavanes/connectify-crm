@@ -56,7 +56,7 @@ export class AppModule implements NestModule {
       .apply(
         cookieSession({
           secret: this.configService.get<string>('COOKIE_SECRET'),
-          maxAge: 60 * 10 * 1000
+          maxAge: this.configService.get<number>('COOKIE_TIMEOUT_MINUTES') * 60 * 1000
         }),
         CurrentUserMiddleware
       )
