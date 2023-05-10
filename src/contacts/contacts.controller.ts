@@ -10,13 +10,15 @@ import {
   BadRequestException,
   Query
 } from '@nestjs/common';
-import { CreateContactDto, UpdateContactDto } from './dtos/';
+import { ContactDto, CreateContactDto, UpdateContactDto } from './dtos/';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { AuthRoute } from 'src/guards/auth.guard';
 import { ContactsService } from './contacts.service';
 import { QueryContactsDto } from './dtos/query-contacts.dto';
-import { AuthRoute } from 'src/guards/auth.guard';
 
 @Controller('contacts')
 @AuthRoute('user', 'admin')
+@Serialize(ContactDto)
 export class ContactsController {
   constructor(
     private contactsService: ContactsService
