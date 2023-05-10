@@ -13,8 +13,10 @@ import {
 import { CreateContactDto, UpdateContactDto } from './dtos/';
 import { ContactsService } from './contacts.service';
 import { QueryContactsDto } from './dtos/query-contacts.dto';
+import { AuthRoute } from 'src/guards/auth.guard';
 
 @Controller('contacts')
+@AuthRoute('user', 'admin')
 export class ContactsController {
   constructor(
     private contactsService: ContactsService
