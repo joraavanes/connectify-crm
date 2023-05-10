@@ -4,15 +4,22 @@ import { CreateContactDto } from './dtos/create-contact.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryContactsDto } from './dtos/query-contacts.dto';
+import { ClientsService } from 'src/clients/clients.service';
 
 @Injectable()
 export class ContactsService {
   constructor(
-    @InjectRepository(Contact) private repo: Repository<Contact>
+    @InjectRepository(Contact) private repo: Repository<Contact>,
+    private clientsService: ClientsService
   ) { }
 
-  createContact(model: CreateContactDto) {
+  async createContact(model: CreateContactDto) {
     const contact = this.repo.create({ ...model });
+    const client = await this.clientsService.findClient(model.clientId);
+
+    if (!client) return undefined;
+
+    contact.client = client;
     return this.repo.save(contact);
   }
 
@@ -23,7 +30,7 @@ export class ContactsService {
   findByEmail(email: string) {
     return this.repo.findOneBy({
       email
-    })
+    });
   }
 
   queryContacts({ fullname, mobile, email, phone, role, count, pageNumber }: QueryContactsDto) {

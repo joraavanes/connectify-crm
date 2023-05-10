@@ -1,9 +1,11 @@
+import { Transform } from "class-transformer";
 import {
   IsEmail,
   IsNotEmpty,
   IsString,
   MaxLength,
-  IsOptional
+  IsOptional,
+  IsNumber
 } from "class-validator";
 
 export class CreateContactDto {
@@ -28,4 +30,8 @@ export class CreateContactDto {
   @IsNotEmpty()
   @IsEmail({}, { message: "Email is not valid" })
   email: string;
+
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  clientId: number;
 }

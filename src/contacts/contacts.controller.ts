@@ -23,8 +23,11 @@ export class ContactsController {
   ) { }
 
   @Post()
-  createContact(@Body() body: CreateContactDto) {
-    return this.contactsService.createContact(body);
+  async createContact(@Body() body: CreateContactDto) {
+    const contact = await this.contactsService.createContact(body);
+    if (!contact) throw new BadRequestException();
+
+    return contact;
   }
 
   @Get()
