@@ -34,14 +34,15 @@ export class ContactsService {
   }
 
   queryContacts({ fullname, mobile, email, phone, role, count, pageNumber }: QueryContactsDto) {
-    return this.repo.createQueryBuilder()
-      .select("*")
-      .where(fullname ? "fullname = :fullname" : "TRUE", { fullname })
-      .andWhere(mobile ? "mobile = :mobile" : "TRUE", { mobile })
-      .andWhere(email ? "email = :email" : "TRUE", { email })
-      .andWhere(phone ? "phone = :phone" : "TRUE", { phone })
-      .andWhere(role ? "role = :role" : "TRUE", { role })
-      .orderBy("id", "DESC")
+    return this.repo.createQueryBuilder("contact")
+      .leftJoinAndSelect("contact.client", "client")
+      .select("contact.id, clientId, fullname, mobile, contact.email, contact.phone, role")
+      .where(fullname ? "LOWER(fullname) = :fullname" : "TRUE", { fullname: fullname?.toLowerCase() })
+      .andWhere(mobile ? "LOWER(mobile) = :mobile" : "TRUE", { mobile: mobile?.toLowerCase() })
+      .andWhere(email ? "LOWER(contact.email) = :email" : "TRUE", { email: email?.toLowerCase() })
+      .andWhere(phone ? "LOWER(contact.phone) = :phone" : "TRUE", { phone: phone?.toLowerCase() })
+      .andWhere(role ? "LOWER(role) = :role" : "TRUE", { role: role?.toLowerCase() })
+      .orderBy("contact.id", "DESC")
       .offset((pageNumber - 1) * pageNumber)
       .limit(count)
       .getRawMany();
