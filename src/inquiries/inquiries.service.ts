@@ -5,16 +5,22 @@ import { Inquiry } from './domain/inquiry.entity';
 import { User } from 'src/users/domain/user.entity';
 import { CreateInquiryDto } from './dtos';
 import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
+import { ClientsService } from 'src/clients/clients.service';
 
 @Injectable()
 export class InquiriesService {
   constructor(
-    @InjectRepository(Inquiry) private repo: Repository<Inquiry>
+    @InjectRepository(Inquiry) private repo: Repository<Inquiry>,
+    private clientsService: ClientsService
   ) { }
 
-  createInquiry(dto: CreateInquiryDto, currentUser: User) {
+  async createInquiry(dto: CreateInquiryDto, currentUser: User) {
     const inquiry = this.repo.create(dto);
+    const client = await this.clientsService.findClient(dto.clientId)
+    if (!client) return undefined;
+
     inquiry.user = currentUser;
+    inquiry.client = client;
 
     return this.repo.save(inquiry);
   }
