@@ -10,7 +10,7 @@ export class Client {
     issuedAt.setHours(0, 0, 0, 0);
     this.issuedAt = issuedAt;
   }
-  
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -48,6 +48,8 @@ export class Client {
   })
   contacts: Contact[];
 
-  @ManyToOne(() => User, user => user.clients)
+  @ManyToOne(() => User, user => user.clients, {
+    onDelete: 'SET NULL'
+  })
   user: User;
 }

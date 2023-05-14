@@ -25,9 +25,7 @@ export class User {
   @OneToMany(() => Inquiry, inquiry => inquiry.user)
   inquiries: Inquiry[];
 
-  @OneToMany(() => Client, client => client.user, {
-    onDelete: 'SET NULL'
-  })
+  @OneToMany(() => Client, client => client.user)
   clients: Client[];
 
   @Column({ default: false })
