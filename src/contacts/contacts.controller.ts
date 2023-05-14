@@ -18,13 +18,13 @@ import { QueryContactsDto } from './dtos/query-contacts.dto';
 
 @Controller('contacts')
 @AuthRoute('user', 'admin')
-@Serialize(ContactDto)
 export class ContactsController {
   constructor(
     private contactsService: ContactsService
   ) { }
 
   @Post()
+  @Serialize(ContactDto)
   async createContact(@Body() body: CreateContactDto) {
     const contact = await this.contactsService.createContact(body);
     if (!contact) throw new BadRequestException();
@@ -38,6 +38,7 @@ export class ContactsController {
   }
 
   @Get(':email')
+  @Serialize(ContactDto)
   async findOneByEmail(@Param('email') email: string) {
     const model = await this.contactsService.findByEmail(email);
     if (!model) {
@@ -47,6 +48,7 @@ export class ContactsController {
   }
 
   @Patch(':id')
+  @Serialize(ContactDto)
   async updateContact(@Param('id') id: string, @Body() body: UpdateContactDto) {
     const model = await this.contactsService.updateContact(parseInt(id), body);
 
@@ -56,6 +58,7 @@ export class ContactsController {
   }
 
   @Delete(':id')
+  @Serialize(ContactDto)
   async removeContact(@Param('id') id: string) {
     const model = await this.contactsService.removeContact(parseInt(id));
 
