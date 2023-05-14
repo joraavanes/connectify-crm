@@ -1,4 +1,5 @@
-import { IsDate, IsString } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsDate, IsNumber, IsString } from "class-validator";
 
 export class CreateInquiryDto {
   constructor() {
@@ -7,12 +8,12 @@ export class CreateInquiryDto {
     this.issuedAt = issuedAt;
   }
 
-  // @IsString()
-  // client: string;
-
   @IsString()
   product: string;
 
   @IsDate()
   issuedAt: Date;
+
+  @IsNumber()
+  clientId: number;
 }
