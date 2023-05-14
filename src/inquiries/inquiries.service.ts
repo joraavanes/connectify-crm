@@ -54,6 +54,7 @@ export class InquiriesService {
       .andWhere(issuedAt ? "issuedAt = :issuedAt" : 'TRUE', { issuedAt })
       .andWhere(userEmail ? "user.email = :email" : "TRUE", { email: userEmail })
       .orderBy('issuedAt', 'DESC')
+      .orderBy('inquiry.id', 'DESC')
       .setParameters({ issuedAt })
       .offset((pageNumber - 1) * count) // .skip can be used without join
       .limit(count) // .take can be used without join
