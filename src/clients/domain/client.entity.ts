@@ -38,14 +38,10 @@ export class Client {
   @Column({ length: 12 })
   phone: string;
 
-  @OneToMany(() => Inquiry, inquiry => inquiry.client, {
-    onDelete: 'CASCADE'
-  })
+  @OneToMany(() => Inquiry, inquiry => inquiry.client)
   inquiries: Inquiry[];
 
-  @OneToMany(() => Contact, contact => contact.client, {
-    onDelete: 'CASCADE'
-  })
+  @OneToMany(() => Contact, contact => contact.client)
   contacts: Contact[];
 
   @ManyToOne(() => User, user => user.clients, {

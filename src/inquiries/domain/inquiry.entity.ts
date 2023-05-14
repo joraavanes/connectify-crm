@@ -14,10 +14,12 @@ export class Inquiry {
   issuedAt: Date;
 
   @ManyToOne(() => User, user => user.inquiries, {
-    onDelete: 'CASCADE'
+    onDelete: 'SET NULL'
   })
   user: User;
 
-  @ManyToOne(() => Client, client => client.inquiries)
+  @ManyToOne(() => Client, client => client.inquiries, {
+    onDelete: 'CASCADE'
+  })
   client: Client;
 }

@@ -21,6 +21,8 @@ export class Contact {
   @Column()
   email: string;
 
-  @ManyToOne(() => Client, client => client.contacts)
+  @ManyToOne(() => Client, client => client.contacts, {
+    onDelete: 'SET NULL'
+  })
   client: Client;
 }
