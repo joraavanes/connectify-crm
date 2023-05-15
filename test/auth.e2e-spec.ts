@@ -6,11 +6,20 @@ import { AppModule } from 'src/app.module';
 describe('Auth e2e test', () => {
   let app: INestApplication;
   let inquiryId: number;
+  let clientId: number;
   let cookie: string[];
+
+  const clientModel = {
+    name: 'Feathers Co.',
+    industry: 'Insurance',
+    phone: '343-333-9839'
+  };
+
   const inquiryModel = {
     product: 'phone cases',
     client: 'phone retails',
   };
+
   const userModel = {
     email: 'mark@mail.com',
     password: 'abcde',
@@ -37,11 +46,21 @@ describe('Auth e2e test', () => {
       });
   }
 
+  function createNewClient() {
+    return request(app.getHttpServer())
+      .post('/clients')
+      .set('Cookie', cookie)
+      .send(clientModel)
+      .expect(res => {
+        clientId = res.body.id;
+      });
+  }
+
   function createNewInquiry() {
     return request(app.getHttpServer())
       .post('/inquiries')
       .set('Cookie', cookie)
-      .send(inquiryModel)
+      .send({ ...inquiryModel, clientId })
       .expect(201)
       .expect((res) => {
         inquiryId = res.body.id;
@@ -75,8 +94,9 @@ describe('Auth e2e test', () => {
       });
   });
 
-  it('should delete all inquiries associated to a user, if user is deleted', async () => {
+  it('should keep inquiries associated to a user, if user deleted', async () => {
     await createNewUser();
+    await createNewClient();
     await createNewInquiry();
 
     await request(app.getHttpServer())
@@ -85,10 +105,24 @@ describe('Auth e2e test', () => {
 
     return request(app.getHttpServer())
       .get(`/inquiries/${inquiryId}`)
-      .expect(404);
+      .expect(200);
   });
 
-  afterEach(() => {
-    return request(app.getHttpServer()).delete(`/users/${userModel.email}`);
+  afterEach(async () => {
+    if (inquiryId) {
+      await request(app.getHttpServer())
+        .delete(`/inquiries/${inquiryId}`)
+        .set('Cookie', cookie)
+        .expect(200);
+    }
+
+    await request(app.getHttpServer()).delete(`/users/${userModel.email}`);
+
+    if (clientId) {
+      await request(app.getHttpServer())
+        .delete(`/clients/${clientId}`)
+        .set('Cookie', cookie)
+        .expect(200);
+    }
   });
 });
