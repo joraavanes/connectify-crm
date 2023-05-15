@@ -7,12 +7,19 @@ describe('Inquiry e2e test', () => {
   let app: INestApplication;
   let cookie: string[];
   let inquiryId: number;
+  let clientId: number;
 
   const userModel = {
     email: 'mark@mail.com',
     password: 'abcde',
     fullname: 'Mark Tj',
     role: 'admin'
+  };
+
+  const clientModel = {
+    name: 'Feathers Co.',
+    industry: 'Insurance',
+    phone: '343-333-9839'
   };
 
   const inquiryModel = {
@@ -35,13 +42,21 @@ describe('Inquiry e2e test', () => {
       .expect((res) => {
         cookie = res.get('Set-Cookie');
       });
+
+    await request(app.getHttpServer())
+      .post('/clients')
+      .set('Cookie', cookie)
+      .send(clientModel)
+      .expect(res => {
+        clientId = res.body.id;
+      });
   });
 
   function createNewInquiry() {
     return request(app.getHttpServer())
       .post('/inquiries')
       .set('Cookie', cookie)
-      .send(inquiryModel)
+      .send({ ...inquiryModel, clientId })
       .expect(res => { inquiryId = res.body.id });
   }
 
@@ -49,7 +64,7 @@ describe('Inquiry e2e test', () => {
     return request(app.getHttpServer())
       .post('/inquiries')
       .set('Cookie', cookie)
-      .send(inquiryModel)
+      .send({ ...inquiryModel, clientId })
       .expect(201)
       .expect(res => {
         inquiryId = res.body.id;
@@ -112,6 +127,11 @@ describe('Inquiry e2e test', () => {
 
     await request(app.getHttpServer())
       .delete(`/users/${userModel.email}`)
+      .expect(200);
+
+    await request(app.getHttpServer())
+      .delete(`/clients/${clientId}`)
+      .set('Cookie', cookie)
       .expect(200);
   });
 });
