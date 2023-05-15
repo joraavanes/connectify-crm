@@ -81,6 +81,15 @@ describe('Auth e2e test', () => {
       });
   });
 
+  it('fails to sign up a new user with already existing user with email', async () => {
+    await createNewUser();
+
+    return request(app.getHttpServer())
+      .post('/users/signup')
+      .send(userModel)
+      .expect(400);
+  });
+
   it('should sign up a new user and get registered user info from /users/current-user', async () => {
     await createNewUser();
 
@@ -105,6 +114,20 @@ describe('Auth e2e test', () => {
 
     return request(app.getHttpServer())
       .get(`/inquiries/${inquiryId}`)
+      .expect(200);
+  });
+
+  it('should keep clients associated to a user, if user deleted', async () => {
+    await createNewUser();
+    await createNewClient();
+    await createNewInquiry();
+
+    await request(app.getHttpServer())
+      .delete(`/users/${userModel.email}`)
+      .expect(200);
+
+    return request(app.getHttpServer())
+      .get(`/clients/${clientId}`)
       .expect(200);
   });
 
