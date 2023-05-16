@@ -93,6 +93,21 @@ describe('Auth e2e test', () => {
       .expect(400);
   });
 
+  it('should sign out the account successfully', async () => {
+    await createNewUser();
+
+    return request(app.getHttpServer())
+      .post('/users/signout')
+      .set('Cookie', cookie)
+      .expect(201);
+  });
+
+  it('should fail signing out if user not signed in', async () => {
+    return request(app.getHttpServer())
+      .post('/users/signout')
+      .expect(403);
+  });
+
   it('should sign up a new user and get registered user info from /users/current-user', async () => {
     await createNewUser();
 
@@ -126,7 +141,7 @@ describe('Auth e2e test', () => {
 
     return request(app.getHttpServer())
       .post('/users/signin')
-      .send({ email: userModel, password: userModel.password + '1'})
+      .send({ email: userModel, password: userModel.password + '1' })
       .expect(400);
   });
 
