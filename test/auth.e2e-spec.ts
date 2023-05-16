@@ -46,6 +46,11 @@ describe('Auth e2e test', () => {
       });
   }
 
+  function signOutUser() {
+    return request(app.getHttpServer())
+      .post('/users/signout');
+  }
+
   function createNewClient() {
     return request(app.getHttpServer())
       .post('/clients')
@@ -101,6 +106,30 @@ describe('Auth e2e test', () => {
         const { email } = res.body;
         expect(email).toBe(userModel.email);
       });
+  });
+
+  it('should sign in successfully', async () => {
+    await createNewUser();
+    await signOutUser();
+
+    return request(app.getHttpServer())
+      .post('/users/signin')
+      .send({ email: userModel.email, password: userModel.password })
+      .expect(201)
+      .expect(res => {
+        expect(res?.body?.email).toBe(userModel.email);
+        expect(res.get('Set-Cookie')).toBeDefined();
+      });
+  });
+
+  it('should fail signing in with incorrect credentials', async () => {
+    await createNewUser();
+    await signOutUser();
+
+    return request(app.getHttpServer())
+      .post('/users/signin')
+      .send({ email: userModel, password: userModel.password + '1'})
+      .expect(400);
   });
 
   it('should keep inquiries associated to a user, if user deleted', async () => {
