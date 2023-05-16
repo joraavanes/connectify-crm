@@ -23,7 +23,7 @@ describe('AuthService', () => {
         return Promise.resolve(updatedUser);
       },
       createUser: (user: CreateUserDto) => {
-        users.push({ id: 1, confirmed: false, inquiries: [], ...user });
+        users.push({ id: 1, confirmed: false, inquiries: [], ...user } as User);
         return Promise.resolve({ id: 1, ...user } as User);
       }
     };

@@ -19,8 +19,8 @@ describe('UsersController', () => {
       },
       createUser: (dto: CreateUserDto) => {
         if (users.find(user => user.email === dto.email)) return Promise.reject('User already existing');
-        users.push({ id: 1, ...dto, confirmed: false, inquiries: [] });
-        return Promise.resolve({ id: 1, ...dto, confirmed: false, inquiries: [] });
+        users.push({ id: 1, ...dto, confirmed: false, inquiries: [] } as User);
+        return Promise.resolve({ id: 1, ...dto, confirmed: false, inquiries: [] } as User);
       }
     };
     mockAuthService = {
