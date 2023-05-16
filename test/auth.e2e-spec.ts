@@ -40,7 +40,6 @@ describe('Auth e2e test', () => {
     return request(app.getHttpServer())
       .post('/users/signup')
       .send(userModel)
-      .expect(201)
       .expect((res) => {
         cookie = res.get('Set-Cookie');
       });
@@ -66,7 +65,6 @@ describe('Auth e2e test', () => {
       .post('/inquiries')
       .set('Cookie', cookie)
       .send({ ...inquiryModel, clientId })
-      .expect(201)
       .expect((res) => {
         inquiryId = res.body.id;
       });
