@@ -13,13 +13,10 @@ import {
 } from '@nestjs/common';
 import { InquiriesService } from './inquiries.service';
 import { AuthRoute } from 'src/guards/auth.guard';
-import { CreateInquiryDto } from './dtos';
+import { CreateInquiryDto, InquiryDto, QueryInquiriesDto, UpdateInquiryDto } from './dtos';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { InquiryDto } from './dtos/inquiry.dto';
-import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
-import { UpdateInquiryDto } from './dtos/update-inquiry.dto';
 
 @Controller('inquiries')
 export class InquiriesController {

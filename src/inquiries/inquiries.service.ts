@@ -3,9 +3,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inquiry } from './domain/inquiry.entity';
 import { User } from 'src/users/domain/user.entity';
-import { CreateInquiryDto } from './dtos';
-import { QueryInquiriesDto } from './dtos/query-inquiries.dto';
 import { ClientsService } from 'src/clients/clients.service';
+import { CreateInquiryDto, QueryInquiriesDto } from './dtos';
 
 @Injectable()
 export class InquiriesService {
