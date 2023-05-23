@@ -20,6 +20,9 @@ export class ClientsService {
             order: {
                 issuedAt: { direction: 'DESC' },
                 id: { direction: 'DESC' }
+            },
+            relations: {
+                user: true
             }
         })
     }
