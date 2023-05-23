@@ -5,8 +5,11 @@ import { User } from 'src/users/domain/user.entity';
 import { ClientsService } from './clients.service';
 import { AuthRoute } from 'src/guards/auth.guard';
 import { UpdateClientDto } from './dtos/update-client.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ClientDto } from './dtos/client.dto';
 
 @Controller('clients')
+@Serialize(ClientDto)
 export class ClientsController {
     constructor(
         private clientsService: ClientsService
