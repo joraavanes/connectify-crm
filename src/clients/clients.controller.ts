@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe,  Delete, Get, NotFoundException, Param, Patch, Post, Query } from '@nestjs/common';
 import { CreateClientDto } from './dtos/create-client.dto';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
@@ -16,8 +16,8 @@ export class ClientsController {
     ) { }
 
     @Get(':id')
-    async findClient(@Param('id') id: string) {
-        const client = await this.clientsService.findClient(+id);
+    async findClient(@Param('id', ParseIntPipe) id: number) {
+        const client = await this.clientsService.findClient(id);
         if (!client) throw new NotFoundException();
 
         return client;
@@ -36,8 +36,8 @@ export class ClientsController {
 
     @Patch(':id')
     @AuthRoute()
-    async updateClient(@Param('id') id: string, @Body() dto: UpdateClientDto) {
-        const client = await this.clientsService.updateClient(+id, dto);
+    async updateClient(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateClientDto) {
+        const client = await this.clientsService.updateClient(id, dto);
         if (!client) throw new NotFoundException();
 
         return client;
@@ -45,8 +45,8 @@ export class ClientsController {
 
     @Delete(':id')
     @AuthRoute()
-    async deleteClient(@Param('id') id: string) {
-        const client = await this.clientsService.deleteClient(+id);
+    async deleteClient(@Param('id', ParseIntPipe) id: number) {
+        const client = await this.clientsService.deleteClient(id);
         if (!client) throw new NotFoundException();
 
         return client;
