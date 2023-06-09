@@ -24,7 +24,9 @@ import { Client } from './clients/domain/client.entity';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: 'sqlite',
+        type: 'postgres',
+        username: config.get<string>('DB_USERNAME'),
+        password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
         entities: [Contact, User, Inquiry, Client],
         synchronize: true
