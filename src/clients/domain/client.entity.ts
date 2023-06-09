@@ -5,12 +5,6 @@ import { User } from "src/users/domain/user.entity";
 
 @Entity()
 export class Client {
-  // constructor() {
-  //   const issuedAt = new Date();
-  //   issuedAt.setHours(0, 0, 0, 0);
-  //   this.issuedAt = issuedAt;
-  // }
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +14,7 @@ export class Client {
   @Column()
   industry: string;
 
-  @Column({ default: Date.now() })
+  @Column({ default: new Date() })
   issuedAt: Date;
 
   @Column({ nullable: true })
