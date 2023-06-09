@@ -1,6 +1,7 @@
 import { Client } from "src/clients/domain/client.entity";
 import { Inquiry } from "src/inquiries/domain/inquiry.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Role } from "./role.enum";
 
 @Entity()
 export class User {
@@ -16,8 +17,13 @@ export class User {
   @Column()
   fullname: string;
 
-  @Column({ nullable: true })
-  role: string;
+  @Column({
+    type: "enum",
+    enum: Role,
+    array: true,
+    default: [Role.User]
+  })
+  roles: Role[];
 
   @Column({ nullable: true })
   department: string;

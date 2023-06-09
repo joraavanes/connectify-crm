@@ -1,4 +1,5 @@
-import { IsEmail, IsOptional, IsString } from "class-validator";
+import { IsArray, IsEmail, IsEnum, IsOptional, IsString } from "class-validator";
+import { Role } from "../domain/role.enum";
 
 export class CreateUserDto {
   @IsEmail()
@@ -6,12 +7,15 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
-  
+
   @IsString()
   fullname: string;
-  
-  @IsString()
-  role: string;
+
+  @IsEnum(
+    [Role.Admin, Role.User],
+    { each: true, message: "Roles are incorrect." }
+  )
+  roles: Role[];
 
   @IsOptional()
   @IsString()

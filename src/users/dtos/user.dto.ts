@@ -1,5 +1,6 @@
 import { Expose, Transform } from 'class-transformer';
 import { Inquiry } from 'src/inquiries/domain/inquiry.entity';
+import { Role } from '../domain/role.enum';
 
 export class UserDto {
   @Expose()
@@ -9,7 +10,7 @@ export class UserDto {
   fullname: string;
   
   @Expose()
-  role: string;
+  roles: Role[];
   
   @Expose()
   department: string;
