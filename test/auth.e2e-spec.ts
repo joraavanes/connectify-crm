@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
 
@@ -24,7 +24,7 @@ describe('Auth e2e test', () => {
     email: 'mark@mail.com',
     password: 'abcde',
     fullname: 'Mark Tj',
-    role: 'user',
+    roles: ['user'],
   };
 
   beforeEach(async () => {
@@ -76,11 +76,11 @@ describe('Auth e2e test', () => {
       .send(userModel)
       .expect(201)
       .then((res) => {
-        const { email, fullname, role } = res.body;
+        const { email, fullname, roles } = res.body;
 
         expect(email).toEqual(userModel.email);
         expect(fullname).toEqual(userModel.fullname);
-        expect(role).toEqual(userModel.role);
+        expect(roles).toEqual(userModel.roles);
       });
   });
 

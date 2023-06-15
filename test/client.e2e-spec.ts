@@ -1,4 +1,4 @@
-import * as request from 'supertest';
+import request from 'supertest';
 import { Test } from "@nestjs/testing";
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
@@ -12,7 +12,7 @@ describe("Client e2e test", () => {
     email: 'mark@mail.com',
     password: 'abcde',
     fullname: 'Mark Tj',
-    role: 'user',
+    roles: ['user'],
   };
 
   const clientModel = {
