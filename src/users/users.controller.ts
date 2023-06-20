@@ -18,10 +18,11 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthService } from 'src/users/auth.service';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/domain/user.entity';
-import { AuthRoute } from 'src/guards/auth.guard';
+import { Authenticate } from 'src/guards/authenticate.guard';
 
 @Controller('users')
 @Serialize(UserDto)
+@Authenticate()
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -34,7 +35,6 @@ export class UsersController {
   }
 
   @Get('current-user')
-  @AuthRoute('admin', 'user')
   currentUser(@CurrentUser() user: User) {
     return user;
   }
@@ -67,7 +67,6 @@ export class UsersController {
   }
 
   @Post('signout')
-  @AuthRoute()
   signout(@Session() session: any) {
     session.userId = null;
   }

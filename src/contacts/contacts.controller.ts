@@ -12,12 +12,12 @@ import {
 } from '@nestjs/common';
 import { ContactDto, CreateContactDto, UpdateContactDto } from './dtos/';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { AuthRoute } from 'src/guards/auth.guard';
 import { ContactsService } from './contacts.service';
 import { QueryContactsDto } from './dtos/query-contacts.dto';
+import { Authenticate } from 'src/guards/authenticate.guard';
 
 @Controller('contacts')
-@AuthRoute('user', 'admin')
+@Authenticate()
 export class ContactsController {
   constructor(
     private contactsService: ContactsService

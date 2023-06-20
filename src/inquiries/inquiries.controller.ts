@@ -12,7 +12,7 @@ import {
   Query
 } from '@nestjs/common';
 import { InquiriesService } from './inquiries.service';
-import { AuthRoute } from 'src/guards/auth.guard';
+import { Authenticate } from 'src/guards/authenticate.guard';
 import { CreateInquiryDto, InquiryDto, QueryInquiriesDto, UpdateInquiryDto } from './dtos';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/domain/user.entity';
@@ -39,7 +39,7 @@ export class InquiriesController {
   }
 
   @Post()
-  @AuthRoute()
+  @Authenticate()
   @Serialize(InquiryDto)
   createInquiry(
     @Body() createInquiryDto: CreateInquiryDto,
@@ -49,7 +49,7 @@ export class InquiriesController {
   }
 
   @Patch(':id')
-  @AuthRoute()
+  @Authenticate()
   @Serialize(InquiryDto)
   async udpateInquiry(
     @Param('id', ParseIntPipe) id: number,
@@ -62,7 +62,7 @@ export class InquiriesController {
   }
 
   @Delete(':id')
-  @AuthRoute()
+  @Authenticate()
   @Serialize(InquiryDto)
   async removeInquiry(@Param('id', ParseIntPipe) id: number) {
     const inquiry = await this.inquiriesService.removeInquiry(id);
