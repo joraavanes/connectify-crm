@@ -19,6 +19,7 @@ import { AuthService } from 'src/users/auth.service';
 import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/domain/user.entity';
 import { Authenticate } from 'src/guards/authenticate.guard';
+import { AllowAnonymous } from './decorators/isPublic.decorator';
 
 @Controller('users')
 @Serialize(UserDto)
@@ -47,6 +48,7 @@ export class UsersController {
   }
 
   @Post('signup')
+  @AllowAnonymous()
   async signup(@Body() body: CreateUserDto, @Session() session: any) {
     const user = await this.authService.signup(body);
 
@@ -57,6 +59,7 @@ export class UsersController {
   }
 
   @Post('signin')
+  @AllowAnonymous()
   async signin(@Body() body: UserLoginDto, @Session() session: any) {
     const user = await this.authService.signin(body);
 
