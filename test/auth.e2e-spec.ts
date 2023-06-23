@@ -31,6 +31,8 @@ describe('Auth e2e test', () => {
     const module = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+    
+    cookie = null;
 
     app = module.createNestApplication();
     await app.init();
@@ -76,6 +78,7 @@ describe('Auth e2e test', () => {
       .send(userModel)
       .expect(201)
       .then((res) => {
+        cookie = res.get('Set-Cookie');
         const { email, fullname, roles } = res.body;
 
         expect(email).toEqual(userModel.email);
@@ -152,6 +155,7 @@ describe('Auth e2e test', () => {
 
     await request(app.getHttpServer())
       .delete(`/users/${userModel.email}`)
+      .set('Cookie', cookie)
       .expect(200);
 
     return request(app.getHttpServer())
@@ -166,6 +170,7 @@ describe('Auth e2e test', () => {
 
     await request(app.getHttpServer())
       .delete(`/users/${userModel.email}`)
+      .set('Cookie', cookie)
       .expect(200);
 
     return request(app.getHttpServer())
@@ -181,7 +186,11 @@ describe('Auth e2e test', () => {
         .expect(200);
     }
 
-    await request(app.getHttpServer()).delete(`/users/${userModel.email}`);
+    if (cookie) {
+      await request(app.getHttpServer())
+        .delete(`/users/${userModel.email}`)
+        .set('Cookie', cookie);
+    }
 
     if (clientId) {
       await request(app.getHttpServer())

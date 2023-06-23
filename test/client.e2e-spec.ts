@@ -87,7 +87,8 @@ describe("Client e2e test", () => {
 
   afterEach(async () => {
     await request(app.getHttpServer())
-      .delete(`/users/${userModel.email}`);
+      .delete(`/users/${userModel.email}`)
+      .set('Cookie', cookie);
 
     if (clientId) {
       await request(app.getHttpServer())

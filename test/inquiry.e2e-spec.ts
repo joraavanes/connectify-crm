@@ -127,6 +127,7 @@ describe('Inquiry e2e test', () => {
 
     await request(app.getHttpServer())
       .delete(`/users/${userModel.email}`)
+      .set('Cookie', cookie)
       .expect(200);
 
     await request(app.getHttpServer())
